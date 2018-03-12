@@ -1,0 +1,36 @@
+{"DBs":
+  {
+      "Server1": {
+        "host": "host1",
+        "user":"server1_user",
+        "pwd": "server1_pw",
+        "dbname": "db1_name",
+        "dbuser": "db1_pw",
+        "dbhost":"db1_host",
+        "dbpassword":"db1_pw",
+        "port": 3306
+    },
+
+    "Server2": {
+        "host": "host2",
+        "user":"server2_user",
+        "pwd": "server2_pw",
+        "dbname": "db2_name",
+        "dbuser": "db2_pw",
+        "dbhost":"db2_host",
+        "dbpassword":"db2_pw",
+        "port": 3306
+    },
+
+    "Server2": {
+        "host": "host3",
+        "user":"server3_user",
+        "pwd": "server3_pw",
+        "dbname": "db3_name",
+        "dbuser": "db3_pw",
+        "dbhost":"db3_host",
+        "dbpassword":"db3_pw",
+        "port": 3306
+    }
+  }
+}

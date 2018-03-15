@@ -40,12 +40,17 @@ def ssh(processed, database, conf):
 
     rs=con.cursor()
     for i in processed:
-        query=open(i, 'r').read()
+        query = open(i, 'r').read()
+        query = query.split('\n', 2)[2]
         rs.execute(query)
-        csvname=processed[i]
-        result=csv.writer(open(csvname, "wb"))
-        for row in rs:
-            result.writerow(row)
+        csvname = processed[i]
+        rows = rs.fetchall()
+        result = open(csvname, 'w')
+        field_names = [i[0] for i in rs.description]
+        ofile  = csv.writer(result)
+        ofile.writerow(field_names)
+        ofile.writerows(rows)
+        result.close()
     rs.close()
     con.close()
     server.stop()

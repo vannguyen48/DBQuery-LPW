@@ -13,10 +13,30 @@ import sys
 import time
 from sshtunnel import SSHTunnelForwarder
 
+"""
+First, fill out configuration information and save queries as an .sql files (one query per sql file)
+
+To run:
+python3 dbquery.py sql_directory database_schema path/to/configfile
+
+"""
+
 def main():
+    """
+    Main Function
+    """
     parse()
 
 def ssh(processed, database, conf):
+    """
+    Connects to server and creates connection to the database on that server
+    Performs the query, and writes result into a csv file
+
+    Args:
+        processed: sql file containing query
+        database: database schema in the query
+        conf: configuration files
+    """
     with open(conf, 'r') as f:
         data=json.load(f)
     ssh=paramiko.SSHClient()
@@ -56,11 +76,12 @@ def ssh(processed, database, conf):
     server.stop()
     ssh.close()
 
-def query(processed, con):
-    for i in processed:
-        query=open(i, 'r').read()
-
 def parse():
+    """
+    Parses command line arguments. From command line, include directory to database queries,
+    database schema, and path to server and database configuration
+    """
+
     parser=argparse.ArgumentParser(description='Script to perform query on a server and save as CSV file (with local port forwarding)')
     parser.add_argument('SQL_PATH', type=str,
                   help='the path to the directory where files or SQL scripts are located.')
@@ -76,6 +97,11 @@ def parse():
         process_files(args.SQL_PATH, args.DB, args.CONF)
 
 def process_files(basepath, database, conf):
+    """
+    Processes files in sql query directory and generate equivalent output
+    name for query result sql_files
+    """
+
     sql_files={}
     base_head=os.path.dirname(basepath)
     for path, dirs, files in os.walk(basepath):
@@ -88,6 +114,14 @@ def process_files(basepath, database, conf):
     ssh(sql_files, database, conf)
 
 def name_generator(filename):
+    """
+    Generates output name based on existing file names
+    Arg:
+        filename: sql file name
+    Returns:
+        fname: output file name (.csv extension)
+    """
+
     name_prefix=datetime_generator()
     name=filename.split(".")
     name_suffix=name[0]
@@ -95,8 +129,18 @@ def name_generator(filename):
     return fname
 
 def datetime_generator():
+    """
+    Supplements name_generator
+    Returns:
+        dt: current datetime string
+    """
+
     dt=datetime.datetime.now().strftime("%y%m%d%H%M")
     return dt
 
 if __name__ == '__main__':
+    """
+    Performs a main check so that this script can run on its own (rather than being imported from another module).
+
+    """
     main()
